@@ -13,7 +13,6 @@ static Tester *TESTER;
 int main(int argc, char **argv) {
 	glutInit(&argc, argv);
 	TESTER = new Tester(argc,argv);
-	TESTER->start = clock();
 	glutMainLoop();	
 	return 0;
 }
@@ -35,30 +34,8 @@ Tester::Tester(int argc,char **argv) {
 	WinY=480;
 	LeftDown=MiddleDown=RightDown=false;
 	MouseX=MouseY=0;
-	std::cout << argc << std::endl;
-	//loading skeleton and skin
-	std::cout << argv[1] << std::endl; 
-	this->skeleton = *(new Skeleton()); 
-	skeleton.load(argv[1]); 
-	this->skin.load(argv[2]);
-	skinName = *new std::string(argv[2]);
-	this->skin.skel = &this->skeleton;
-	//morph = *new std::string(argv[3]);
-	//morph2 = *new std::string(argv[4]);
-	anim = new animation(); 
-	anim->load(argv[3]);
-	std::cout << std::endl;		
-	
-	//getting all the children
-	//this->skeleton.getRoot()->printChildren(); 	
-	std::vector<joint*>* joints = new std::vector<joint*>; 
-	joints->push_back(this->skeleton.getRoot()); 
-	std::cout << this->skeleton.getRoot()->getName() << std::endl; 
-	this->skeleton.getRoot()->traverse(joints);
-	std::cout << joints->size() << std::endl;
-	this->skeleton.joints = *joints;
-	anim->skel = this->skeleton;
 
+	cloth = new ParticleSystem(); 
 	// Create the window
 	glutInitDisplayMode( GLUT_RGBA| GLUT_DOUBLE | GLUT_DEPTH );
 	glutInitWindowSize( WinX, WinY );
@@ -67,11 +44,12 @@ Tester::Tester(int argc,char **argv) {
 	glutSetWindowTitle( WINDOWTITLE );
 	glEnable(GL_LIGHTING);
 	glDisable(GL_BLEND);
-	//glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
 
 	GLfloat light0_diffuse[] = { 1, 1.0, 0, 1.0 };
 	GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -95,7 +73,7 @@ Tester::Tester(int argc,char **argv) {
 	glutSetWindow( WindowHandle );
 
 	//ok works
-	glEnable(GL_DEPTH_TEST);	
+	//glEnable(GL_DEPTH_TEST);	
 
 	// Background color
 	glClearColor( 0., 0., 0., 1. );	
@@ -112,9 +90,13 @@ Tester::Tester(int argc,char **argv) {
 	// Initialize components
 
 	Cam.SetAspect(float(WinX)/float(WinY));	
+	/*
 	if (this->skin.texcoords.size() >0)
 	this->skin.textureLoader.LoadGLTextures(skin.texName.c_str());
 	time = 0.0;
+	*/ 
+	Cube = *new SpinningCube();	
+	glPointSize(3.0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -130,14 +112,8 @@ void Tester::Update() {
 	// Update the components in the world
 	Cam.Update();
 	Cube.Update();
-	
-	anim->animate(time); 
-	//weird lag after 3 cycles 
-	//time += 0.01;
+	//cloth->update(0.001); 
 
-	anim->animate((clock() - start) / 1000.0);
-	skeleton.update();
-	skin.update(&this->skeleton);
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
 	glutPostRedisplay();
@@ -150,6 +126,7 @@ void Tester::Reset() {
 	Cam.SetAspect(float(WinX)/float(WinY));
 
 	Cube.Reset();
+	cloth->reset(); 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -161,13 +138,14 @@ void Tester::Draw() {
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	// Draw components
+	// Draw components	
 	Cam.Draw();		// Sets up projection & viewing matrices
 	//Cube.Draw();
+	glLoadIdentity(); 
+	glutWireCube(1); 
 	//skeleton.draw(); 
 	glLoadIdentity();
-	
-	skin.draw();
+	cloth->draw();
 	// Finish drawing scene
 	glFinish();
 	glutSwapBuffers();
@@ -198,69 +176,7 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;  
 		case 'r':
 			Reset();
-			break;
-		case 'q':
-			skeleton.selectedJoint--;
-			if (skeleton.selectedJoint < 0)
-			{
-				skeleton.selectedJoint = skeleton.joints.size() - 1;
-			}
-			currJoint = skeleton.joints[skeleton.selectedJoint];
-			std::cout << "SELECTED JOINT: " << currJoint->getName() << std::endl;
-			break;
-
-		case  'e':
-			skeleton.selectedJoint++;
-			if (skeleton.selectedJoint >= skeleton.joints.size())
-			{
-				skeleton.selectedJoint = 0;
-			}
-			currJoint = skeleton.joints[skeleton.selectedJoint];
-			std::cout << "SELECTED JOINT: " << currJoint->getName() << std::endl;
-			break;
-		case 'w':
-			if (currJoint == 0)
-				currJoint = skeleton.joints[0];			
-			currJoint->changeDOF(1, currJoint->dofX += 0.01);
-			break;
-		case 's':
-			if (currJoint == 0)
-				currJoint = skeleton.joints[0];
-			currJoint->changeDOF(1, currJoint->dofX -= 0.01);
-			break;
-		case 'a':
-			if (currJoint == 0)
-				currJoint = skeleton.joints[0];
-			currJoint->changeDOF(2, currJoint->dofY -= 0.01);
-			break;
-		case 'd':
-			if (currJoint == 0)
-				currJoint = skeleton.joints[0];
-			currJoint->changeDOF(2, currJoint->dofY += 0.01);
-			break;
-		case 'z':
-			if (currJoint == 0)
-				currJoint = skeleton.joints[0];
-			currJoint->changeDOF(3, currJoint->dofZ -= 0.01);
-			break;
-		case 'x':
-			if (currJoint == 0)
-				currJoint = skeleton.joints[0];
-			currJoint->changeDOF(3, currJoint->dofZ += 0.01);
-			break;
-		/*case 'm':
-			toMorph = !toMorph; 
-			std::cout << toMorph << std::endl;
-			if (toMorph)
-			{				
-				this->skin.loadMorph(morph.c_str());							
-				this->skin.loadMorph(morph2.c_str());
-			}
-			else
-			{
-				this->skin.load(skinName.c_str());
-			}
-			break;*/
+			break;		
 	}
 }
 

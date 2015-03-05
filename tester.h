@@ -11,6 +11,7 @@
 #include "CSE169_skeleton\skin.h"
 #include "CSE169_skeleton\Skeleton.h"
 #include "CSE169_skeleton\animation.h"
+#include "CSE169_skeleton\ParticleSystem.h"
 ////////////////////////////////////////////////////////////////////////////////
 
 class Tester {
@@ -45,14 +46,7 @@ private:
 	// Components
 	Camera Cam;
 	SpinningCube Cube;
-	Skeleton skeleton;
-	skin skin; 
-	joint *currJoint = 0; 
-	bool toMorph = false; 
-	std::string skinName; 
-	std::string morph;
-	std::string morph2;
-	animation *anim; 	
+	ParticleSystem *cloth; 
 
 };
 
