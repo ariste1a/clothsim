@@ -97,6 +97,7 @@ Tester::Tester(int argc,char **argv) {
 	*/ 
 	Cube = *new SpinningCube();	
 	glPointSize(3.0);
+	wind = *new Vector3(); 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +113,7 @@ void Tester::Update() {
 	// Update the components in the world
 	Cam.Update();
 	Cube.Update();
-	cloth->update(0.001); 
+	cloth->update(0.001, wind); 
 
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
@@ -124,7 +125,6 @@ void Tester::Update() {
 void Tester::Reset() {
 	Cam.Reset();
 	Cam.SetAspect(float(WinX)/float(WinY));
-
 	Cube.Reset();	
 }
 
@@ -178,7 +178,23 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;		
 		case 't':
 			cloth->reset();
+			wind.Zero();
 			break;
+		case '1':
+			wind += Vector3(0.1, 0, 0);
+			std::cout << "WIND X IS NOW " << wind.x << std::endl;
+			break;
+		case '2':
+			wind += Vector3(0, 0.1, 0);
+			std::cout << "WIND Y IS NOW " << wind.y << std::endl;
+			break;
+		case '3':
+			wind += Vector3(0, 0, 0.1);
+			std::cout << "WIND Z IS NOW " << wind.z << std::endl;
+			break;
+		case '4':
+			wind.Zero();
+			std::cout << "WIND STOPS BLOWIN'" << std::endl; 
 	}
 }
 

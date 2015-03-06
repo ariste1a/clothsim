@@ -89,7 +89,8 @@
     <ClInclude Include="..\token.h" />
     <ClInclude Include="..\vector3.h" />
     <ClInclude Include="..\Vector4.h" />
-    <ClInclude Include="aeroDynamics.h" />
+    <ClInclude Include="Aerodynamics.h" />
+    <ClInclude Include="triangle.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="BMPImage.h" />
     <ClInclude Include="channel.h" />
@@ -117,7 +118,8 @@
     <ClCompile Include="..\token.cpp" />
     <ClCompile Include="..\vector3.cpp" />
     <ClCompile Include="..\Vector4.cpp" />
-    <ClCompile Include="aeroDynamics.cpp" />
+    <ClCompile Include="Aerodynamics.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="channel.cpp" />
     <ClCompile Include="DOF.cpp" />

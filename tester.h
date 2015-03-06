@@ -47,6 +47,7 @@ private:
 	Camera Cam;
 	SpinningCube Cube;
 	ParticleSystem *cloth; 
+	Vector3 wind; 
 
 };
 

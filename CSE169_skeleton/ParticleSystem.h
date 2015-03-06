@@ -3,7 +3,7 @@
 #include "../vector3.h"
 #include <vector> 
 #include "SpringDamper.h"
-#include "aeroDynamics.h"
+#include "Triangle.h"
 class ParticleSystem
 {
 public:
@@ -13,8 +13,8 @@ public:
 	std::vector<Particle*> particles; 
 	Particle* clothParticles[20][20]; 
 	std::vector<SpringDamper*> springDampers; 
-	std::vector<aeroDynamics*> triangles;
-	void update(float deltaTime); 
+	std::vector<Triangle*> triangles;
+	void update(float deltaTime, Vector3& wind); 
 	void draw(); 
 	void reset(); 
 	~ParticleSystem();

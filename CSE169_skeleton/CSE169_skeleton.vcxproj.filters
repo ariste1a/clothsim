@@ -87,7 +87,10 @@
     <ClInclude Include="Spring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="aeroDynamics.h">
+    <ClInclude Include="triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Aerodynamics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,7 +167,10 @@
     <ClCompile Include="Spring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="aeroDynamics.cpp">
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Aerodynamics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

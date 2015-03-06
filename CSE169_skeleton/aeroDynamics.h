@@ -1,18 +1,12 @@
 #pragma once
-#include "Particle.h"
-class aeroDynamics
+#include "triangle.h"
+class Aerodynamics
 {
 public:
-	aeroDynamics();
-	aeroDynamics(Particle *p1, Particle *p2, Particle *p3);
-	Particle *p1;
-	Particle *p2;
-	Particle *p3;
-	float density; 
-	float cd; 
-	Vector3 normal;
-	Vector3 airVelocity; 
+	Aerodynamics();
+	std::vector<Triangle*> triangles;
+	Vector3 windVelocity; 
 	void computeForces(); 
-	~aeroDynamics();
+	~Aerodynamics();
 };
 

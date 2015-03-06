@@ -59,8 +59,8 @@ ParticleSystem::ParticleSystem()
 	{
 		for (int j = 0; j < numParticles-1; j++)
 		{												
-			aeroDynamics *tri1 = new aeroDynamics(clothParticles[i][j], clothParticles[i + 1][j], clothParticles[i][j + 1]);
-			aeroDynamics *tri2 = new aeroDynamics(clothParticles[i][j + 1], clothParticles[i + 1][j + 1], clothParticles[i + 1][j]);
+			Triangle *tri1 = new Triangle(clothParticles[i][j], clothParticles[i + 1][j], clothParticles[i][j + 1]);
+			Triangle *tri2 = new Triangle(clothParticles[i][j + 1], clothParticles[i + 1][j + 1], clothParticles[i + 1][j]);
 			triangles.push_back(tri1);
 			triangles.push_back(tri2);
 		}
@@ -71,12 +71,10 @@ ParticleSystem::ParticleSystem()
 
 }
 
-void ParticleSystem::update(float deltaTime) {
+void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 	// Compute forces
 	Vector3 gravity(0, -9.8, 0);	
-	//need to add up all the forces at every single step. first step is gravity, then the next are the spring forces, then the spring dampen forces. 
 
-	//use this instead
 	for (int i = 0; i < particles.size(); i++)
 	{
 		//particles[i]->draw(); 
@@ -88,7 +86,6 @@ void ParticleSystem::update(float deltaTime) {
 	}
 	
 
-
 	for (int i = 0; i < springDampers.size(); i++)
 	{
 		springDampers[i]->computeForce(); 
@@ -96,19 +93,11 @@ void ParticleSystem::update(float deltaTime) {
 
 	for (int i = 0; i < triangles.size(); i++)
 	{
-		triangles[i]->computeForces();
+		triangles[i]->computeForces(wind);
 	}
 	
-	/*
-	- For each particle: Apply gravity
-	- For each spring-damper: Compute & apply forces
-	- For each triangle: Compute & apply aerodynamic forces
-	*/
-
-	// Integrate
 	for (int i = 0; i < particles.size(); i++)
-	{
-		//springDampers[i]->computeForce();
+	{		
 		this->particles[i]->update(deltaTime); 
 	}
 }
