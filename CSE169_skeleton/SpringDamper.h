@@ -7,9 +7,9 @@ public:
 	SpringDamper(Particle *p1, Particle *p2);
 	float springConstant; 
 	float dampingFactor; 
-	Particle *p1, *p2; 
-	float length; 
+	Particle *p1, *p2; 	
 	float restLength; 
+	float restLength2; 
 	void computeForce(); 
 	void draw(); 
 	~SpringDamper();

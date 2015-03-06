@@ -1,50 +1,45 @@
 #include "SpringDamper.h"
 
 
-SpringDamper::SpringDamper()
-{
-	length = 1.0; 
-	springConstant = 1.0; 
-	dampingFactor = 1.0; 
-	restLength = 1.0; 
-}
 
 SpringDamper::SpringDamper(Particle *p1, Particle *p2)
 {
 	this->p1 = p1; 
-	this->p2 = p2; 
-	length = 0.1;
-	springConstant = 10;
-	dampingFactor = 0.5;
-	restLength = 0.1;
+	this->p2 = p2; 	
+	springConstant = 10000;
+	dampingFactor =  230;
+	//springConstant = 1000; 
+	//dampingFactor = 250;
+	Vector3 rest = this->p1->position - this->p2->position; 
+	restLength = rest.Mag(); 
+	restLength2 = rest.Mag2(); 
 }
 
 //spring dampers: up down, cross 
 void SpringDamper::computeForce()
 {
-	//length is vec->dist
-	Vector3 *vec = new Vector3(p1->position - p2->position);	
-	//unit length vec from p1 to p2
-	Vector3 *e = new Vector3((p1->position - p2->position) / vec->Mag()); //or vec->Normalize(); 
-	
-	//dampening force
-	Vector3 *velocity = new Vector3((p1->velocity * (*e)) - (p2->velocity * (*e)));
-	Vector3 dForce = -dampingFactor*(*velocity); 
+	Vector3 pulledDist = Vector3(p1->position - p2->position);
+	float dist = pulledDist.Mag();
+	//Vector3 e = pulledDist / pulledDist.Mag(); 
+	Vector3 e = pulledDist / dist; //pulledDist.Normalize(); 
+	float v1 = e.Dot(p1->velocity); 
+	float v2 = e.Dot(p2->velocity);
 
-	float x = vec->Mag2() - length; 
+	/*if (dist > restLength)
+		std::cout << "stuff" << std::endl;*/
 
-	Vector3 X = x*(*e); 
+	float sForce = -springConstant*(dist- restLength);
+	//Vector3 dForce = -dampingFactor*(v1 - v2);
+	float dForce = -dampingFactor*(v1 - v2); 
+	//float sdForce = -springConstant*(dist - restLength) - dampingFactor*(v1 - v2);
+	float sdForce = sForce + dForce; 
 
-	Vector3 springForce = -springConstant * X; 
-	
-	//not right?
-	Vector3 sdForce = springForce - dForce; 
-	if (p1->mass > 0)
-		p1->applyForce(sdForce*(*e)); 
-	if (p2->mass > 0)
-		p2->applyForce(-1 * (sdForce*(*e))); 
 
-	//then add the forces?
+	//need to find a way not to apply forces... 
+	if (!p1->pinned)
+		p1->applyForce(sdForce*e);	
+	if (!p2->pinned) 
+		p2->applyForce(-1 * sdForce*e);			
 }
 
 void SpringDamper::draw()

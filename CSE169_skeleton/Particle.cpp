@@ -3,10 +3,11 @@
 
 Particle::Particle()
 {
-	mass = 1.0; 
+	mass = 1.0;
 	position = *new Vector3();
 	velocity = *new Vector3(); 
 	force = *new Vector3(); 
+	pinned = false; 
 }
 
 void Particle::update(float deltaTime) {
@@ -19,10 +20,6 @@ void Particle::update(float deltaTime) {
 		- For each spring-damper: Compute & apply forces
 		- For each triangle: Compute & apply aerodynamic forces		
 	*/
-
-	float rho = 0.1; 
-	float coeffDrag = 0.1; 
-	float springConst = 0.1; 
 	
 	//Vector3 fAero = 0.5*rho*velocity.Mag2()*coeffDrag*(-velocity.Normalize()); 
 	
@@ -31,6 +28,12 @@ void Particle::update(float deltaTime) {
 
 	velocity += Accel*deltaTime;
 	position += velocity*deltaTime;
+
+	/*if (position.y > -2)
+	{
+		velocity += Accel*deltaTime;
+		position += velocity*deltaTime;
+	}*/
 	// Zero out Force vector
 	force.Zero();
 }

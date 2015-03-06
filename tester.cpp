@@ -44,7 +44,7 @@ Tester::Tester(int argc,char **argv) {
 	glutSetWindowTitle( WINDOWTITLE );
 	glEnable(GL_LIGHTING);
 	glDisable(GL_BLEND);
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 	//glEnable(GL_CULL_FACE);
@@ -112,7 +112,7 @@ void Tester::Update() {
 	// Update the components in the world
 	Cam.Update();
 	Cube.Update();
-	//cloth->update(0.001); 
+	cloth->update(0.001); 
 
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
@@ -125,8 +125,7 @@ void Tester::Reset() {
 	Cam.Reset();
 	Cam.SetAspect(float(WinX)/float(WinY));
 
-	Cube.Reset();
-	cloth->reset(); 
+	Cube.Reset();	
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -177,6 +176,9 @@ void Tester::Keyboard(int key,int x,int y) {
 		case 'r':
 			Reset();
 			break;		
+		case 't':
+			cloth->reset();
+			break;
 	}
 }
 

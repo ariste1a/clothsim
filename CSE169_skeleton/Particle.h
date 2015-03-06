@@ -13,6 +13,7 @@ public:
 	void update(float deltaTime); 
 	void draw(); 
 	void applyForce(Vector3 &f); 
+	bool pinned; 
 	~Particle();
 };
 
