@@ -53,6 +53,18 @@ ParticleSystem::ParticleSystem()
 		}
 	}
 	
+	
+	//triangle surfaces
+	for (int i = 0; i < numParticles-1; i++)
+	{
+		for (int j = 0; j < numParticles-1; j++)
+		{												
+			aeroDynamics *tri1 = new aeroDynamics(clothParticles[i][j], clothParticles[i + 1][j], clothParticles[i][j + 1]);
+			aeroDynamics *tri2 = new aeroDynamics(clothParticles[i][j + 1], clothParticles[i + 1][j + 1], clothParticles[i + 1][j]);
+			triangles.push_back(tri1);
+			triangles.push_back(tri2);
+		}
+	}
 	this->clothParticles[0][numParticles - 1]->pinned = true; 
 	this->clothParticles[(numParticles / 2)][numParticles -1]->pinned = true;
 	this->clothParticles[numParticles - 1][numParticles - 1]->pinned = true; 
@@ -80,6 +92,11 @@ void ParticleSystem::update(float deltaTime) {
 	for (int i = 0; i < springDampers.size(); i++)
 	{
 		springDampers[i]->computeForce(); 
+	}
+
+	for (int i = 0; i < triangles.size(); i++)
+	{
+		triangles[i]->computeForces();
 	}
 	
 	/*
