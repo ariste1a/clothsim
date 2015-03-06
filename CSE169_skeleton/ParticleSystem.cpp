@@ -14,7 +14,7 @@ ParticleSystem::ParticleSystem()
 			//need to make top row with weight 0 
 			Particle *particle = new Particle(); 
 			//positioning them? then need to make top row solid and immutable 
-			particle->position = Vector3(i / 10.0, j / 10.0, 0);
+			particle->position = Vector3(i , j , 0);
 			this->clothParticles[i][j] = particle;
 			this->particles.push_back(particle);
 			if (j == numParticles - 1)
@@ -47,12 +47,10 @@ ParticleSystem::ParticleSystem()
 			{
 				sd = new SpringDamper(this->clothParticles[i][j], this->clothParticles[i-1][j - 1]);
 				this->springDampers.push_back(sd);
-				sd = new SpringDamper(this->clothParticles[i][j-1], this->clothParticles[i-1][j]);
+				sd = new SpringDamper(this->clothParticles[i][j - 1], this->clothParticles[i - 1][j]);
 				this->springDampers.push_back(sd);
 			}
-
 		}
-
 	}
 	
 	this->clothParticles[0][numParticles - 1]->pinned = true; 
@@ -176,8 +174,8 @@ void ParticleSystem::reset()
 	{
 		for (int j = 0; j < numParticles; j++)
 		{					
-			this->clothParticles[i][j]->position.x = i / 10.0; 
-			this->clothParticles[i][j]->position.y = j / 10.0;
+			this->clothParticles[i][j]->position.x = i; 
+			this->clothParticles[i][j]->position.y = j;
 			this->clothParticles[i][j]->position.z = 0; 
 
 			this->clothParticles[i][j]->force.Zero(); 

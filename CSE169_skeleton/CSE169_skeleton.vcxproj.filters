@@ -87,6 +87,9 @@
     <ClInclude Include="Spring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="aeroDynamics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\camera.cpp">
@@ -159,6 +162,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Spring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="aeroDynamics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
