@@ -11,29 +11,23 @@ Particle::Particle()
 }
 
 void Particle::update(float deltaTime) {
-	// Compute acceleration (Newton’s second law)	
-	
-	/* should put this somewhere else?*/
-
-	/*
-		- For each particle: Apply gravity
-		- For each spring-damper: Compute & apply forces
-		- For each triangle: Compute & apply aerodynamic forces		
-	*/
-	
-	//Vector3 fAero = 0.5*rho*velocity.Mag2()*coeffDrag*(-velocity.Normalize()); 
-	
-	// Compute new position & velocity
 	Vector3 Accel = (1.0 / mass) * force;
+	
 
 	velocity += Accel*deltaTime;
 	position += velocity*deltaTime;
 
-	/*if (position.y > -2)
+	if (position.y < -10)
 	{
-		velocity += Accel*deltaTime;
-		position += velocity*deltaTime;
-	}*/
+		float elasticity = 1.0; 
+		float friction = 0.05;
+		//position.y = 10 - position.y; 
+		velocity.y = -elasticity * velocity.y; 
+		velocity.x = (1 - friction)* velocity.x;
+		velocity.z = (1 - friction)* velocity.z;
+
+		velocity.Zero();
+	}
 	// Zero out Force vector
 	force.Zero();
 }

@@ -53,6 +53,7 @@ private:
 	Matrix34 position; 
 	Matrix34 rotation; 
 	float rot; 
+	float move; 
 
 };
 

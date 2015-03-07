@@ -16,10 +16,20 @@ SpringDamper::SpringDamper(Particle *p1, Particle *p2)
 	//dampingFactor = 180;
 
 	//for 0.01; 
-	springConstant = 640;
-	dampingFactor = 13;
+	//springConstant = 200;
+	//dampingFactor = 17;
+	//springConstant = 200; 
+	//dampingFactor = 15;
+	
+	//1/60 1/600
+	//springConstant = 300; 
+	//dampingFactor = 60;
+	
+	// 1/60 1/100
+	springConstant = 200; 
+	dampingFactor = 40;
 	Vector3 rest = this->p1->position - this->p2->position; 
-	restLength = rest.Mag(); 
+	restLength = rest.Mag();
 	restLength2 = rest.Mag2(); 
 }
 

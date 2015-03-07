@@ -75,79 +75,83 @@ void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 	// Compute forces
 
 	Vector3 gravity(0, -9.8, 0);	
-
-	for (int i = 0; i < particles.size(); i++)
+	float newTime = 1 / 300.0;
+	for (int j = 0; j < 10; j++)
 	{
-		//particles[i]->draw(); 
-		if (!particles[i]->pinned)
+		for (int i = 0; i < particles.size(); i++)
 		{
-			Vector3 force = gravity*particles[i]->mass; // f=mg
-			particles[i]->applyForce(force);
+			//particles[i]->draw(); 
+			if (!particles[i]->pinned)
+			{
+				Vector3 force = gravity*particles[i]->mass; // f=mg
+				particles[i]->applyForce(force);
+			}
+		}
+
+
+		for (int i = 0; i < springDampers.size(); i++)
+		{
+			springDampers[i]->computeForce();
+		}
+
+		for (int i = 0; i < triangles.size(); i++)
+		{
+			triangles[i]->computeForces(wind);
+		}
+
+		for (int i = 0; i < particles.size(); i++)
+		{	
+			this->particles[i]->update(newTime);
 		}
 	}
-	
 
-	for (int i = 0; i < springDampers.size(); i++)
-	{
-		springDampers[i]->computeForce(); 
-	}
-
-	for (int i = 0; i < triangles.size(); i++)
-	{
-		triangles[i]->computeForces(wind);
-	}
-	
-	for (int i = 0; i < particles.size(); i++)
-	{		
-		this->particles[i]->update(deltaTime); 
-	}
 }
 
 
 //make triangles diagonally
 void ParticleSystem::draw()
 {
-	glBegin(GL_POINTS);
-		for (int i = 0; i < particles.size(); i++)
-		{
-			particles[i]->draw(); 
-		}
-	glEnd();
-
-
-	//GLfloat cyan[] = { 0.f, .8f, .8f, 1.f };
-	//GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-	//GLfloat shiny[] = { 50.f };
-	//glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-	//glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
-
-	//glBegin(GL_TRIANGLES);
-	//for (int i = 0; i < numParticles-1; i++)
-	//{
-	//	for (int j = 0; j < numParticles-1; j++)
+	//glBegin(GL_POINTS);
+	//	for (int i = 0; i < particles.size(); i++)
 	//	{
-	//		glColor3f(0.0, 1, 0.0);
-	//		Vector3 p1 = clothParticles[i][j]->position;
-	//		Vector3 p2 = clothParticles[i+1][j]->position; 			
-	//		Vector3 p3 = clothParticles[i][j+1]->position;
-	//		
-	//		glVertex3f(p1.x, p1.y, p1.z);
-	//		glVertex3f(p2.x, p2.y, p2.z);
-	//		glVertex3f(p3.x, p3.y, p3.z);
-
-	//		glColor3f(0.0, 0.0, 1.0);
-
-	//		Vector3 p12 = clothParticles[i][j+1]->position;
-	//		Vector3 p22 = clothParticles[i+1][j+1]->position;
-	//		Vector3 p32 = clothParticles[i+1][j]->position;
-
-	//		glVertex3f(p32.x, p32.y, p32.z);
-	//		glVertex3f(p12.x, p12.y, p12.z);
-	//		glVertex3f(p22.x, p22.y, p22.z);								
+	//		particles[i]->draw(); 
 	//	}
-	//}
-	//glEnd(); 
+	//glEnd();
+
+
+	GLfloat cyan[] = { 0.f, .8f, .8f, 1.f };
+	GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	GLfloat shiny[] = { 50.f };
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
+
+	glBegin(GL_TRIANGLES);
+	for (int i = 0; i < numParticles-1; i++)
+	{
+		for (int j = 0; j < numParticles-1; j++)
+		{
+			//glColor3f(0.0, 1, 0.0);
+			Vector3 p1 = clothParticles[i][j]->position;
+			Vector3 p2 = clothParticles[i+1][j]->position; 			
+			Vector3 p3 = clothParticles[i][j+1]->position;
+			
+			glVertex3f(p1.x, p1.y, p1.z);
+			glVertex3f(p2.x, p2.y, p2.z);
+			glVertex3f(p3.x, p3.y, p3.z);
+
+			//glColor3f(0.0, 0.0, 1.0);
+
+			Vector3 p12 = clothParticles[i][j+1]->position;
+			Vector3 p22 = clothParticles[i+1][j+1]->position;
+			Vector3 p32 = clothParticles[i+1][j]->position;
+
+			glVertex3f(p32.x, p32.y, p32.z);
+			glVertex3f(p12.x, p12.y, p12.z);
+			glVertex3f(p22.x, p22.y, p22.z);								
+		}
+	}
+	glEnd(); 
 	/*
 	glBegin(GL_QUADS);
 	for (int i = 0; i < numParticles - 1; i++)
@@ -167,11 +171,11 @@ void ParticleSystem::draw()
 		}
 	}
 	glEnd(); */ 
-	
+	/*
 	for (int i = 0; i < springDampers.size(); i++)
 	{
 		springDampers[i]->draw(); 
-	} 
+	} */
 
 }
 

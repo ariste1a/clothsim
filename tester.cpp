@@ -104,8 +104,10 @@ Tester::Tester(int argc,char **argv) {
 	rot = 0.1; 
 	position = *new Matrix34(); 
 	position.Identity(); 
+	move = 0.1;
+	start = clock(); 
 }
-
+	
 ////////////////////////////////////////////////////////////////////////////////
 
 Tester::~Tester() {
@@ -119,7 +121,8 @@ void Tester::Update() {
 	// Update the components in the world
 	Cam.Update();
 	Cube.Update();
-	cloth->update(0.01, wind); 
+	//cloth->update(0.01, wind); 
+	cloth->update(1/60.0, wind);
 
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
@@ -143,6 +146,13 @@ void Tester::Draw() {
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+
+	glBegin(GL_QUADS);
+		glVertex3f(-50, -10, -50);
+		glVertex3f(50, -10, -50);
+		glVertex3f(50, -10, 50);		
+		glVertex3f(-50, -10, 50);			
+	glEnd();
 	// Draw components	
 	Cam.Draw();		// Sets up projection & viewing matrices
 	//Cube.Draw();
@@ -201,27 +211,27 @@ void Tester::Keyboard(int key,int x,int y) {
 			std::cout << "The wind... is troubled today" << std::endl; 
 			break; 
 		case 'w':
-			position.MakeTranslate(Vector3(0, 0.1, 0));
+			position.MakeTranslate(Vector3(0, move, 0));
 			cloth->move(position); 
 			break; 
 		case 's':			
-			position.MakeTranslate(Vector3(0, -0.1, 0));
+			position.MakeTranslate(Vector3(0, -move, 0));
 			cloth->move(position);
 			break;
 		case 'a':			
-			position.MakeTranslate(Vector3(-0.1, 0, 0));
+			position.MakeTranslate(Vector3(-move, 0, 0));
 			cloth->move(position);
 			break;
 		case 'd':			
-			position.MakeTranslate(Vector3(0.1, 0, 0));
+			position.MakeTranslate(Vector3(move, 0, 0));
 			cloth->move(position);
 			break;
 		case 'j':			
-			position.MakeTranslate(Vector3(0, 0, -0.1));
+			position.MakeTranslate(Vector3(0, 0, -move));
 			cloth->move(position);
 			break;
 		case 'k':			
-			position.MakeTranslate(Vector3(0, 0, 0.1));
+			position.MakeTranslate(Vector3(0, 0, move));
 			cloth->move(position);
 			break;	
 		case '.':
