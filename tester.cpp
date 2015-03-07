@@ -122,7 +122,7 @@ void Tester::Update() {
 	Cam.Update();
 	Cube.Update();
 	//cloth->update(0.01, wind); 
-	cloth->update(1/60.0, wind);
+	cloth->update(1/120.0, wind);
 
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
@@ -235,11 +235,11 @@ void Tester::Keyboard(int key,int x,int y) {
 			cloth->move(position);
 			break;	
 		case '.':
-			rotation.MakeRotateZ(rot); 
+			rotation.MakeRotateX(rot); 
 			cloth->rotate(rotation);
 			break;
 		case '/':
-			rotation.MakeRotateZ(-rot);
+			rotation.MakeRotateX(-rot);
 			cloth->rotate(rotation);
 			break;
 	}
@@ -258,11 +258,11 @@ void Tester::processSpecialKeys(int key, int x, int y)
 			cloth->rotate(rotation);
 			break;
 		case GLUT_KEY_UP:
-			rotation.MakeRotateX(rot);
+			rotation.MakeRotateZ(rot);
 			cloth->rotate(rotation);
 			break;
 		case GLUT_KEY_DOWN:
-			rotation.MakeRotateX(-rot);
+			rotation.MakeRotateZ(-rot);
 			cloth->rotate(rotation);
 			break;
 

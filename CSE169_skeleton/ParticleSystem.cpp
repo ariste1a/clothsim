@@ -75,34 +75,30 @@ void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 	// Compute forces
 
 	Vector3 gravity(0, -9.8, 0);	
-	float newTime = 1 / 300.0;
-	for (int j = 0; j < 10; j++)
+	for (int i = 0; i < particles.size(); i++)
 	{
-		for (int i = 0; i < particles.size(); i++)
+		//particles[i]->draw(); 
+		if (!particles[i]->pinned)
 		{
-			//particles[i]->draw(); 
-			if (!particles[i]->pinned)
-			{
-				Vector3 force = gravity*particles[i]->mass; // f=mg
-				particles[i]->applyForce(force);
-			}
+			Vector3 force = gravity*particles[i]->mass; // f=mg
+			particles[i]->applyForce(force);
 		}
+	}
 
 
-		for (int i = 0; i < springDampers.size(); i++)
-		{
-			springDampers[i]->computeForce();
-		}
+	for (int i = 0; i < springDampers.size(); i++)
+	{
+		springDampers[i]->computeForce();
+	}
 
-		for (int i = 0; i < triangles.size(); i++)
-		{
-			triangles[i]->computeForces(wind);
-		}
+	for (int i = 0; i < triangles.size(); i++)
+	{
+		triangles[i]->computeForces(wind);
+	}
 
-		for (int i = 0; i < particles.size(); i++)
-		{	
-			this->particles[i]->update(newTime);
-		}
+	for (int i = 0; i < particles.size(); i++)
+	{	
+		this->particles[i]->update(deltaTime);
 	}
 
 }
