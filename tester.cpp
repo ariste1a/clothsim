@@ -223,7 +223,15 @@ void Tester::Keyboard(int key,int x,int y) {
 		case 'k':			
 			position.MakeTranslate(Vector3(0, 0, 0.1));
 			cloth->move(position);
-			break;			
+			break;	
+		case '.':
+			rotation.MakeRotateZ(rot); 
+			cloth->rotate(rotation);
+			break;
+		case '/':
+			rotation.MakeRotateZ(-rot);
+			cloth->rotate(rotation);
+			break;
 	}
 }
 
