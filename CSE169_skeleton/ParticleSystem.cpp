@@ -118,9 +118,17 @@ void ParticleSystem::draw()
 	GLfloat cyan[] = { 0.f, .8f, .8f, 1.f };
 	GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 	GLfloat shiny[] = { 50.f };
+
+	GLfloat red[] = { 0.8f, 0.0f, .8f, 1.f };
+	GLfloat white2[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	GLfloat shiny2[] = { 1.0f };
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
 	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
+
+	glMaterialfv(GL_BACK, GL_DIFFUSE, red);
+	glMaterialfv(GL_BACK, GL_SPECULAR, white2);
+	glMaterialfv(GL_BACK, GL_SHININESS, shiny2);
 
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < numParticles-1; i++)
@@ -131,7 +139,9 @@ void ParticleSystem::draw()
 			Vector3 p1 = clothParticles[i][j]->position;
 			Vector3 p2 = clothParticles[i+1][j]->position; 			
 			Vector3 p3 = clothParticles[i][j+1]->position;
-			
+			Vector3 normal;
+			normal.Cross(p2 - p1, p3 - p1);
+			//glNormal3f(normal.x, normal.y, normal.z); 
 			glVertex3f(p1.x, p1.y, p1.z);
 			glVertex3f(p2.x, p2.y, p2.z);
 			glVertex3f(p3.x, p3.y, p3.z);
@@ -141,7 +151,9 @@ void ParticleSystem::draw()
 			Vector3 p12 = clothParticles[i][j+1]->position;
 			Vector3 p22 = clothParticles[i+1][j+1]->position;
 			Vector3 p32 = clothParticles[i+1][j]->position;
-
+			normal.Zero(); 
+			normal.Cross(p12 - p12, p32 - p12);
+			//glNormal3f(normal.x, normal.y, normal.z);
 			glVertex3f(p32.x, p32.y, p32.z);
 			glVertex3f(p12.x, p12.y, p12.z);
 			glVertex3f(p22.x, p22.y, p22.z);								

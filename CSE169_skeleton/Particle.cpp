@@ -17,11 +17,11 @@ void Particle::update(float deltaTime) {
 	velocity += Accel*deltaTime;
 	position += velocity*deltaTime;
 
-	if (position.y < -10)
+	if (position.y <= -10)
 	{
 		float elasticity = 1.0; 
-		float friction = 0.05;
-		//position.y = 10 - position.y; 
+		float friction = 5;
+		position.y = position.y + 0.01;
 		velocity.y = -elasticity * velocity.y; 
 		velocity.x = (1 - friction)* velocity.x;
 		velocity.z = (1 - friction)* velocity.z;

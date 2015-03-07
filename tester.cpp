@@ -44,13 +44,12 @@ Tester::Tester(int argc,char **argv) {
 	WindowHandle = glutCreateWindow( WINDOWTITLE );
 	glutSetWindowTitle( WINDOWTITLE );
 	glEnable(GL_LIGHTING);
-	glDisable(GL_BLEND);
-	//glEnable(GL_COLOR_MATERIAL);
+	glDisable(GL_BLEND);	
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 	//glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_COLOR_MATERIAL);
 
 	GLfloat light0_diffuse[] = { 1, 1.0, 0, 1.0 };
 	GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
