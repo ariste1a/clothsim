@@ -17,8 +17,8 @@ ParticleSystem::ParticleSystem()
 			particle->position = Vector3(i , j , 0);
 			this->clothParticles[i][j] = particle;
 			this->particles.push_back(particle);
-			if (j == numParticles - 1)
-				particle->pinned = true;
+			/*if (j == numParticles - 1)
+				particle->pinned = true;*/
 		}
 		
 	}
@@ -192,21 +192,40 @@ void ParticleSystem::reset()
 	}
 }
 
-void ParticleSystem::move(Vector3 pos)
+void ParticleSystem::move(Matrix34 pos)
 {
-	for (int i = 0; i < numParticles; i++)
-	{					
-		clothParticles[i][numParticles-1]->position += pos; 
-	}
+	pos.Transform(clothParticles[0][numParticles - 1]->position, clothParticles[0][numParticles - 1]->position);
+	pos.Transform(clothParticles[(numParticles / 2)][numParticles - 1]->position, clothParticles[(numParticles / 2)][numParticles - 1]->position);
+	pos.Transform(clothParticles[numParticles - 1][numParticles - 1]->position, clothParticles[numParticles - 1][numParticles - 1]->position);
 }
 
-void ParticleSystem::manipulate(Matrix34 matrix)
+void ParticleSystem::rotate(Matrix34 matrix)
 {
-	for (int i = 0; i < numParticles; i++)
-	{
-		clothParticles[i][numParticles - 1]->position;
-		matrix.Transform(clothParticles[i][numParticles - 1]->position, clothParticles[i][numParticles - 1]->position);
-	}
+	//for (int i = 0; i < numParticles; i++)
+	//{
+	//	clothParticles[i][numParticles - 1]->position;
+	//	matrix.Transform(clothParticles[i][numParticles - 1]->position, clothParticles[i][numParticles - 1]->position);
+	//}
+	Vector3 origin; 
+	Vector3 neg = -clothParticles[(numParticles / 2)][numParticles - 1]->position;
+	Matrix34 negate; 
+	Matrix34 rot; 
+	Matrix34 normal;
+	Matrix34 final;
+	
+	negate.MakeTranslate(neg); 
+	rot = matrix; 
+	normal.MakeTranslate(clothParticles[(numParticles / 2)][numParticles - 1]->position);
+
+	/*final.Dot(negate, rot);
+	final.Dot(final, normal);*/
+
+	final.Dot(rot, negate);
+	final.Dot(normal, final);
+
+	final.Transform(clothParticles[0][numParticles - 1]->position, clothParticles[0][numParticles - 1]->position);
+	//matrix.Transform(clothParticles[(numParticles / 2)][numParticles - 1]->position, clothParticles[(numParticles / 2)][numParticles - 1]->position);
+	final.Transform(clothParticles[numParticles - 1][numParticles - 1]->position, clothParticles[numParticles - 1][numParticles - 1]->position);
 }
 
 ParticleSystem::~ParticleSystem()

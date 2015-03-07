@@ -101,9 +101,9 @@ Tester::Tester(int argc,char **argv) {
 	glPointSize(3.0);
 	wind = *new Vector3(); 
 	pos = *new Vector3(); 
-	rotX = 0.0; 
-	rotY = 0.0;
-	rotZ = 0.0;
+	rot = 0.1; 
+	position = *new Matrix34(); 
+	position.Identity(); 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ void Tester::Update() {
 	// Update the components in the world
 	Cam.Update();
 	Cube.Update();
-	cloth->update(0.001, wind); 
+	cloth->update(0.01, wind); 
 
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
@@ -147,9 +147,6 @@ void Tester::Draw() {
 	Cam.Draw();		// Sets up projection & viewing matrices
 	//Cube.Draw();
 	glLoadIdentity(); 
-	glutWireCube(1); 
-	//skeleton.draw(); 
-	glLoadIdentity();
 	cloth->draw();
 	// Finish drawing scene
 	glFinish();
@@ -186,7 +183,6 @@ void Tester::Keyboard(int key,int x,int y) {
 			cloth->reset();
 			wind.Zero();
 			pos.Zero(); 
-			y = 0.0; 
 			break;
 		case '1':
 			wind += Vector3(0.1, 0, 0);
@@ -204,29 +200,29 @@ void Tester::Keyboard(int key,int x,int y) {
 			wind.Zero();
 			std::cout << "The wind... is troubled today" << std::endl; 
 			break; 
-		case 'w':			
+		case 'w':
 			position.MakeTranslate(Vector3(0, 0.1, 0));
-			cloth->manipulate(position); 
+			cloth->move(position); 
 			break; 
 		case 's':			
 			position.MakeTranslate(Vector3(0, -0.1, 0));
-			cloth->manipulate(position);
+			cloth->move(position);
 			break;
 		case 'a':			
 			position.MakeTranslate(Vector3(-0.1, 0, 0));
-			cloth->manipulate(position);
+			cloth->move(position);
 			break;
 		case 'd':			
 			position.MakeTranslate(Vector3(0.1, 0, 0));
-			cloth->manipulate(position);
+			cloth->move(position);
 			break;
 		case 'j':			
 			position.MakeTranslate(Vector3(0, 0, -0.1));
-			cloth->manipulate(position);
+			cloth->move(position);
 			break;
 		case 'k':			
 			position.MakeTranslate(Vector3(0, 0, 0.1));
-			cloth->manipulate(position);
+			cloth->move(position);
 			break;			
 	}
 }
@@ -236,11 +232,20 @@ void Tester::processSpecialKeys(int key, int x, int y)
 {
 	switch (key) {
 		case GLUT_KEY_LEFT:
-			y+=0.01;
-			//Matrix34 pivot 
-			rotation.MakeRotateY(y); 
-			cloth->manipulate(rotation);
-			std::cout << "hitting this" << std::endl;
+			rotation.MakeRotateY(rot); 
+			cloth->rotate(rotation);			
+			break;
+		case GLUT_KEY_RIGHT:
+			rotation.MakeRotateY(-rot);
+			cloth->rotate(rotation);
+			break;
+		case GLUT_KEY_UP:
+			rotation.MakeRotateX(rot);
+			cloth->rotate(rotation);
+			break;
+		case GLUT_KEY_DOWN:
+			rotation.MakeRotateX(-rot);
+			cloth->rotate(rotation);
 			break;
 
 	}

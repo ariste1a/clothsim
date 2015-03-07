@@ -52,9 +52,7 @@ private:
 	Vector3 pos; 
 	Matrix34 position; 
 	Matrix34 rotation; 
-	float rotX; 
-	float rotY; 
-	float rotZ; 
+	float rot; 
 
 };
 

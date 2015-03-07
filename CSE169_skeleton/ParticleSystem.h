@@ -15,8 +15,8 @@ public:
 	std::vector<SpringDamper*> springDampers; 
 	std::vector<Triangle*> triangles;
 	void update(float deltaTime, Vector3& wind); 
-	void move(Vector3 pos);
-	void manipulate(Matrix34 matrix);
+	void move(Matrix34 pos);
+	void rotate(Matrix34 matrix);
 	void draw(); 
 	void reset(); 
 	~ParticleSystem();
