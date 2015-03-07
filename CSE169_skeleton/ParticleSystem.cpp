@@ -73,6 +73,7 @@ ParticleSystem::ParticleSystem()
 
 void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 	// Compute forces
+
 	Vector3 gravity(0, -9.8, 0);	
 
 	for (int i = 0; i < particles.size(); i++)
@@ -190,6 +191,24 @@ void ParticleSystem::reset()
 
 	}
 }
+
+void ParticleSystem::move(Vector3 pos)
+{
+	for (int i = 0; i < numParticles; i++)
+	{					
+		clothParticles[i][numParticles-1]->position += pos; 
+	}
+}
+
+void ParticleSystem::manipulate(Matrix34 matrix)
+{
+	for (int i = 0; i < numParticles; i++)
+	{
+		clothParticles[i][numParticles - 1]->position;
+		matrix.Transform(clothParticles[i][numParticles - 1]->position, clothParticles[i][numParticles - 1]->position);
+	}
+}
+
 ParticleSystem::~ParticleSystem()
 {
 }

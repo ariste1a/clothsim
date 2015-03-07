@@ -44,6 +44,9 @@ void Triangle::computeForces(Vector3 &airVelocity)
 			p2->applyForce(fAeroParticle);
 		if (!p3->pinned)
 			p3->applyForce(fAeroParticle);
+
+		delete one; 
+		delete two; 
 	}
 }
 

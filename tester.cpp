@@ -19,11 +19,12 @@ int main(int argc, char **argv) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// These are really HACKS to make glut call member functions instead of static functions
+// These are really HACKS to ' glut call member functions instead of static functions
 static void display()									{TESTER->Draw();}
 static void idle()										{TESTER->Update();}
 static void resize(int x,int y)							{TESTER->Resize(x,y);}
 static void keyboard(unsigned char key,int x,int y)		{TESTER->Keyboard(key,x,y);}
+static void keyboard2(int key,int x,int y) { TESTER->processSpecialKeys(key, x, y); }
 static void mousebutton(int btn,int state,int x,int y)	{TESTER->MouseButton(btn,state,x,y);}
 static void mousemotion(int x, int y)					{TESTER->MouseMotion(x,y);}
 
@@ -82,6 +83,7 @@ Tester::Tester(int argc,char **argv) {
 	glutDisplayFunc( display );
 	glutIdleFunc( idle );
 	glutKeyboardFunc( keyboard );
+	glutSpecialFunc(keyboard2);
 	glutMouseFunc( mousebutton );
 	glutMotionFunc( mousemotion );
 	glutPassiveMotionFunc( mousemotion );
@@ -98,6 +100,10 @@ Tester::Tester(int argc,char **argv) {
 	Cube = *new SpinningCube();	
 	glPointSize(3.0);
 	wind = *new Vector3(); 
+	pos = *new Vector3(); 
+	rotX = 0.0; 
+	rotY = 0.0;
+	rotZ = 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -179,6 +185,8 @@ void Tester::Keyboard(int key,int x,int y) {
 		case 't':
 			cloth->reset();
 			wind.Zero();
+			pos.Zero(); 
+			y = 0.0; 
 			break;
 		case '1':
 			wind += Vector3(0.1, 0, 0);
@@ -194,10 +202,49 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;
 		case '4':
 			wind.Zero();
-			std::cout << "WIND STOPS BLOWIN'" << std::endl; 
+			std::cout << "The wind... is troubled today" << std::endl; 
+			break; 
+		case 'w':			
+			position.MakeTranslate(Vector3(0, 0.1, 0));
+			cloth->manipulate(position); 
+			break; 
+		case 's':			
+			position.MakeTranslate(Vector3(0, -0.1, 0));
+			cloth->manipulate(position);
+			break;
+		case 'a':			
+			position.MakeTranslate(Vector3(-0.1, 0, 0));
+			cloth->manipulate(position);
+			break;
+		case 'd':			
+			position.MakeTranslate(Vector3(0.1, 0, 0));
+			cloth->manipulate(position);
+			break;
+		case 'j':			
+			position.MakeTranslate(Vector3(0, 0, -0.1));
+			cloth->manipulate(position);
+			break;
+		case 'k':			
+			position.MakeTranslate(Vector3(0, 0, 0.1));
+			cloth->manipulate(position);
+			break;			
 	}
 }
 
+////////SPECIAL KEYS///////////////////
+void Tester::processSpecialKeys(int key, int x, int y)
+{
+	switch (key) {
+		case GLUT_KEY_LEFT:
+			y+=0.01;
+			//Matrix34 pivot 
+			rotation.MakeRotateY(y); 
+			cloth->manipulate(rotation);
+			std::cout << "hitting this" << std::endl;
+			break;
+
+	}
+}
 ////////////////////////////////////////////////////////////////////////////////
 
 void Tester::MouseButton(int btn,int state,int x,int y) {

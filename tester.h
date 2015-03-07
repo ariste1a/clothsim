@@ -30,6 +30,7 @@ public:
 	void Keyboard(int key,int x,int y);
 	void MouseButton(int btn,int state,int x,int y);
 	void MouseMotion(int x,int y);
+	void processSpecialKeys(int key, int x, int y);
 	time_t start;
 	time_t current;
 	float time;
@@ -48,6 +49,12 @@ private:
 	SpinningCube Cube;
 	ParticleSystem *cloth; 
 	Vector3 wind; 
+	Vector3 pos; 
+	Matrix34 position; 
+	Matrix34 rotation; 
+	float rotX; 
+	float rotY; 
+	float rotZ; 
 
 };
 
