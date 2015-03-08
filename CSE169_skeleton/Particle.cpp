@@ -25,7 +25,6 @@ void Particle::update(float deltaTime) {
 		velocity.y = -elasticity * velocity.y; 
 		velocity.x = (1 - friction)* velocity.x;
 		velocity.z = (1 - friction)* velocity.z;
-
 		velocity.Zero();
 	}
 	// Zero out Force vector

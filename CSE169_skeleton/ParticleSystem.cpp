@@ -101,6 +101,26 @@ void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 		this->particles[i]->update(deltaTime);
 	}
 
+	for (int i = 0; i < springDampers.size(); i++)
+	{
+		Vector3 pulledDist = Vector3(springDampers[i]->p1->position - springDampers[i]->p2->position);
+		float dist = pulledDist.Mag();
+		float restLength = springDampers[i]->restLength;
+		Vector3 e = pulledDist / dist; //pulledDist.Normalize(); 
+
+		/*if (dist >(restLength*0.05) && !springDampers[i]->p1->pinned && springDampers[i]->p1->position.y > -10)
+		{
+			Vector3 moveBack = -e*0.01;
+			springDampers[i]->p1->position += moveBack;
+		}
+
+		if (dist > (restLength*0.1) && !springDampers[i]->p2->pinned && springDampers[i]->p2->position.y > -10)
+		{
+			Vector3 moveBack = e*0.01;
+			springDampers[i]->p2->position += moveBack;
+		}*/
+	}
+
 }
 
 
@@ -115,16 +135,17 @@ void ParticleSystem::draw()
 	//glEnd();
 
 
-	GLfloat cyan[] = { 0.f, .8f, .8f, 1.f };
+	GLfloat cyan[] = { 0.f, .5f, .5f, 1.f };
 	GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 	GLfloat shiny[] = { 50.f };
+
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
 
 	GLfloat red[] = { 0.8f, 0.0f, .8f, 1.f };
 	GLfloat white2[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 	GLfloat shiny2[] = { 1.0f };
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
 
 	glMaterialfv(GL_BACK, GL_DIFFUSE, red);
 	glMaterialfv(GL_BACK, GL_SPECULAR, white2);
@@ -136,27 +157,23 @@ void ParticleSystem::draw()
 		for (int j = 0; j < numParticles-1; j++)
 		{
 			//glColor3f(0.0, 1, 0.0);
-			Vector3 p1 = clothParticles[i][j]->position;
-			Vector3 p2 = clothParticles[i+1][j]->position; 			
-			Vector3 p3 = clothParticles[i][j+1]->position;
-			Vector3 normal;
-			normal.Cross(p2 - p1, p3 - p1);
-			//glNormal3f(normal.x, normal.y, normal.z); 
+			Vector3 p0 = clothParticles[i][j]->position;
+			Vector3 p1 = clothParticles[i + 1][j]->position;
+			Vector3 p3 = clothParticles[i + 1][j + 1]->position;
+			Vector3 p2 = clothParticles[i][j + 1]->position;
+
+			//glNormal3f(normal.x, normal.y, normal.z); 			
+			glVertex3f(p0.x, p0.y, p0.z);
 			glVertex3f(p1.x, p1.y, p1.z);
-			glVertex3f(p2.x, p2.y, p2.z);
 			glVertex3f(p3.x, p3.y, p3.z);
 
 			//glColor3f(0.0, 0.0, 1.0);
 
-			Vector3 p12 = clothParticles[i][j+1]->position;
-			Vector3 p22 = clothParticles[i+1][j+1]->position;
-			Vector3 p32 = clothParticles[i+1][j]->position;
-			normal.Zero(); 
-			normal.Cross(p12 - p12, p32 - p12);
+			//normal.Zero(); 
 			//glNormal3f(normal.x, normal.y, normal.z);
-			glVertex3f(p32.x, p32.y, p32.z);
-			glVertex3f(p12.x, p12.y, p12.z);
-			glVertex3f(p22.x, p22.y, p22.z);								
+			glVertex3f(p0.x, p0.y, p0.z);
+			glVertex3f(p3.x, p3.y, p3.z);
+			glVertex3f(p2.x, p2.y, p2.z);								
 		}
 	}
 	glEnd(); 

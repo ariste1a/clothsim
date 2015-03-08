@@ -42,38 +42,45 @@ Tester::Tester(int argc,char **argv) {
 	glutInitWindowSize( WinX, WinY );
 	glutInitWindowPosition( 0, 0 );
 	WindowHandle = glutCreateWindow( WINDOWTITLE );
-	glutSetWindowTitle( WINDOWTITLE );
+	glutSetWindowTitle( WINDOWTITLE );	
 	glEnable(GL_LIGHTING);
-	glDisable(GL_BLEND);	
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
+	glDisable(GL_BLEND);		
 	//glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	//glEnable(GL_COLOR_MATERIAL);
+	glShadeModel(GL_SMOOTH);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
-	GLfloat light0_diffuse[] = { 1, 1.0, 0, 1.0 };
+	GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat light0_diffuse[] = { 0.3, 0.3, 0.3, 1.0 };	
+	GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light0_position[] = { 0, 200, 100, 0.0 };
+	GLfloat spot_direction[] = { 0.1, -1.0, 0.3 };
+	GLfloat attenuation[] = { 1, 0, 0, 0 };
+
+	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
+	glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, attenuation);
+
 	GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
-	GLfloat light1_diffuse[] = { 0, 1.0, 1.0, 1.0 };	
+	GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light1_position[] = { -2.0, 2.0, 1.0, 1.0 };
-	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
+	GLfloat light1_position[] = { 0, 10, 3, 1.0 };	
 
+
+	glEnable(GL_LIGHT1);
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
-	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	GLfloat lightpos[] = { 3, 2, 5, 1 };
-	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
-
-	GLfloat lightpos2[] = { -3, 2, -5, 1 };
-	glLightfv(GL_LIGHT1, GL_POSITION, lightpos2);
-
+	glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, attenuation); 
 
 	glutSetWindow( WindowHandle );
 
 	//ok works
-	//glEnable(GL_DEPTH_TEST);	
+	glEnable(GL_DEPTH_TEST);	
 
 	// Background color
 	glClearColor( 0., 0., 0., 1. );	
@@ -144,7 +151,13 @@ void Tester::Draw() {
 	glViewport(0, 0, WinX, WinY);
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+	//GLfloat cyan[] = { 0.f, .5f, .5f, 1.f };
+	GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	GLfloat shiny[] = { 50.f };
+
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, white);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
 
 	glBegin(GL_QUADS);
 		glVertex3f(-50, -10, -50);

@@ -26,8 +26,8 @@ SpringDamper::SpringDamper(Particle *p1, Particle *p2)
 	//dampingFactor = 60;
 	
 	// 1/60 1/100
-	springConstant = 240; 
-	dampingFactor = 13;
+	springConstant = 200; 
+	dampingFactor = 23;
 	Vector3 rest = this->p1->position - this->p2->position; 
 	restLength = rest.Mag();
 	restLength2 = rest.Mag2(); 
@@ -41,10 +41,7 @@ void SpringDamper::computeForce()
 	//Vector3 e = pulledDist / pulledDist.Mag(); 
 	Vector3 e = pulledDist / dist; //pulledDist.Normalize(); 
 	float v1 = e.Dot(p1->velocity); 
-	float v2 = e.Dot(p2->velocity);
-
-	/*if (dist > restLength)
-		std::cout << "stuff" << std::endl;*/
+	float v2 = e.Dot(p2->velocity);	
 
 	float sForce = -springConstant*(dist- restLength);
 	//Vector3 dForce = -dampingFactor*(v1 - v2);
@@ -57,7 +54,7 @@ void SpringDamper::computeForce()
 	if (!p1->pinned)
 		p1->applyForce(sdForce*e);	
 	if (!p2->pinned) 
-		p2->applyForce(-1 * sdForce*e);			
+		p2->applyForce(-1.0 * sdForce*e);			
 }
 
 void SpringDamper::draw()
