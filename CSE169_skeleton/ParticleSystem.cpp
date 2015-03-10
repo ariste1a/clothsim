@@ -19,11 +19,8 @@ ParticleSystem::ParticleSystem()
 			this->particles.push_back(particle);
 			/*if (j == numParticles - 1)
 				particle->pinned = true;*/
-		}
-		
+		}	
 	}
-
-
 
 	//add the cross spirng constraints 
 	for (int i = 0; i < numParticles; i++)
@@ -70,11 +67,23 @@ ParticleSystem::ParticleSystem()
 	this->clothParticles[numParticles - 1][numParticles - 1]->pinned = true; 
 
 }
+/* 
+AFTER rendering
+for each node 
+	zero the normals
+	
+for each triangle 
+	compute normal
+	for each node tri vert(3)
+		add normal
+		
+for each node normalize
+*/
 
 void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 	// Compute forces
 
-	Vector3 gravity(0, -9.8, 0);	
+	Vector3 gravity(0, -9.8, 0);
 	for (int i = 0; i < particles.size(); i++)
 	{
 		//particles[i]->draw(); 
@@ -177,30 +186,6 @@ void ParticleSystem::draw()
 		}
 	}
 	glEnd(); 
-	/*
-	glBegin(GL_QUADS);
-	for (int i = 0; i < numParticles - 1; i++)
-	{
-		for (int j = 0; j < numParticles - 1; j++)
-		{
-			glColor3f(0.0, 1, 0.0);
-			Vector3 p1 = clothParticles[i][j]->position;
-			Vector3 p2 = clothParticles[i + 1][j]->position;
-			Vector3 p3 = clothParticles[i][j + 1]->position;
-			Vector3 p4 = clothParticles[i + 1][j + 1]->position; 
-
-			glVertex3f(p4.x, p4.y, p4.z);
-			glVertex3f(p3.x, p3.y, p3.z);
-			glVertex3f(p1.x, p1.y, p1.z);
-			glVertex3f(p2.x, p2.y, p2.z);
-		}
-	}
-	glEnd(); */ 
-	/*
-	for (int i = 0; i < springDampers.size(); i++)
-	{
-		springDampers[i]->draw(); 
-	} */
 
 }
 

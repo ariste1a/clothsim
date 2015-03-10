@@ -12,6 +12,7 @@
 #include "CSE169_skeleton\Skeleton.h"
 #include "CSE169_skeleton\animation.h"
 #include "CSE169_skeleton\ParticleSystem.h"
+#include "CSE169_skeleton\Parachute.h"
 ////////////////////////////////////////////////////////////////////////////////
 
 class Tester {
@@ -54,7 +55,7 @@ private:
 	Matrix34 rotation; 
 	float rot; 
 	float move; 
-
+	Parachute para; 
 };
 
 ////////////////////////////////////////////////////////////////////////////////

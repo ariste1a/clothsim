@@ -10,9 +10,17 @@ Particle::Particle()
 	pinned = false; 
 }
 
+Particle::Particle(float x, float y, float z)
+{
+	mass = 1.0;
+	position = *new Vector3(x, y, z);
+	velocity = *new Vector3();
+	force = *new Vector3();
+	pinned = false;
+}
+
 void Particle::update(float deltaTime) {
-	Vector3 Accel = (1.0 / mass) * force;
-	
+	Vector3 Accel = (1.0 / mass) * force;	
 
 	velocity += Accel*deltaTime;
 	position += velocity*deltaTime;

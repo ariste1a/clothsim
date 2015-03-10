@@ -47,6 +47,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\glut\;$(IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);C:\glut;$(LibraryPath);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -90,6 +92,8 @@
     <ClInclude Include="..\vector3.h" />
     <ClInclude Include="..\Vector4.h" />
     <ClInclude Include="Aerodynamics.h" />
+    <ClInclude Include="Parachute.h" />
+    <ClInclude Include="Rope.h" />
     <ClInclude Include="triangle.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="BMPImage.h" />
@@ -119,6 +123,8 @@
     <ClCompile Include="..\vector3.cpp" />
     <ClCompile Include="..\Vector4.cpp" />
     <ClCompile Include="Aerodynamics.cpp" />
+    <ClCompile Include="Parachute.cpp" />
+    <ClCompile Include="Rope.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="channel.cpp" />

@@ -9,6 +9,7 @@ class ParticleSystem
 public:
 	ParticleSystem();
 	ParticleSystem(int numparticles);
+	ParticleSystem(bool);
 	int numParticles = 20;
 	std::vector<Particle*> particles; 
 	Particle* clothParticles[20][20]; 

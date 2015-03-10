@@ -6,6 +6,7 @@ class Particle
 {
 public:
 	Particle();
+	Particle(float x, float y, float z);
 	float mass; 
 	Vector3 position; 
 	Vector3 velocity; 

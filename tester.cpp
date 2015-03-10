@@ -44,12 +44,12 @@ Tester::Tester(int argc,char **argv) {
 	WindowHandle = glutCreateWindow( WINDOWTITLE );
 	glutSetWindowTitle( WINDOWTITLE );	
 	glEnable(GL_LIGHTING);
-	glDisable(GL_BLEND);		
+	//glDisable(GL_BLEND);
 	//glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	//glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
 	GLfloat light0_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	GLfloat light0_diffuse[] = { 0.3, 0.3, 0.3, 1.0 };	
@@ -64,18 +64,31 @@ Tester::Tester(int argc,char **argv) {
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
 	glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, attenuation);
-
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
 	GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat light1_position[] = { 0, 10, 3, 1.0 };	
 
-
 	glEnable(GL_LIGHT1);
 	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, attenuation); 
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light0_specular);
+	//glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, attenuation); 
+
+	GLfloat light2_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat light2_diffuse[] = { 0.5, 0.0, 0.5, 1.0 };
+	GLfloat light2_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light2_position[] = { 1, 5, 20, 1.0 };
+
+	glEnable(GL_LIGHT2);
+	glLightfv(GL_LIGHT2, GL_POSITION, light2_position);
+	glLightfv(GL_LIGHT2, GL_AMBIENT, light2_ambient);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, light2_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light0_specular);
+	//glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, attenuation);
+
 
 	glutSetWindow( WindowHandle );
 
@@ -112,6 +125,7 @@ Tester::Tester(int argc,char **argv) {
 	position.Identity(); 
 	move = 0.1;
 	start = clock(); 
+	para = *new Parachute(); 
 }
 	
 ////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +143,7 @@ void Tester::Update() {
 	Cube.Update();
 	//cloth->update(0.01, wind); 
 	cloth->update(1/120.0, wind);
-
+	para.update(1 / 120.0, wind);
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
 	glutPostRedisplay();
@@ -165,12 +179,15 @@ void Tester::Draw() {
 		glVertex3f(50, -10, 50);		
 		glVertex3f(-50, -10, 50);			
 	glEnd();
-	// Draw components	
+
+	// Draw components
 	Cam.Draw();		// Sets up projection & viewing matrices
 	//Cube.Draw();
 	glLoadIdentity(); 
 	cloth->draw();
 	// Finish drawing scene
+	glLoadIdentity();
+	para.draw(); 
 	glFinish();
 	glutSwapBuffers();
 }
@@ -203,7 +220,8 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;		
 		case 't':
 			cloth->reset();
-			wind.Zero();
+			para.reset(); 
+			//wind.Zero();
 			pos.Zero(); 
 			break;
 		case '1':
