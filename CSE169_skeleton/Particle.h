@@ -15,6 +15,7 @@ public:
 	void draw(); 
 	void applyForce(Vector3 &f); 
 	bool pinned; 
+	Vector3 normal; 
 	~Particle();
 };
 

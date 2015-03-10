@@ -56,8 +56,16 @@ ParticleSystem::ParticleSystem()
 	{
 		for (int j = 0; j < numParticles-1; j++)
 		{												
-			Triangle *tri1 = new Triangle(clothParticles[i][j], clothParticles[i + 1][j], clothParticles[i][j + 1]);
-			Triangle *tri2 = new Triangle(clothParticles[i][j + 1], clothParticles[i + 1][j + 1], clothParticles[i + 1][j]);
+
+			Vector3 p0 = clothParticles[i][j]->position;
+			Vector3 p1 = clothParticles[i + 1][j]->position;
+			Vector3 p2 = clothParticles[i][j + 1]->position;
+			Vector3 p3 = clothParticles[i + 1][j + 1]->position;
+
+			Triangle *tri1 = new Triangle(clothParticles[i][j], clothParticles[i + 1][j], clothParticles[i + 1][j + 1]);
+			Triangle *tri2 = new Triangle(clothParticles[i][j], clothParticles[i + 1][j + 1], clothParticles[i][j + 1]);
+			//Triangle *tri1 = new Triangle(clothParticles[i][j], clothParticles[i + 1][j], clothParticles[i][j + 1]);
+			//Triangle *tri2 = new Triangle(clothParticles[i][j + 1], clothParticles[i + 1][j + 1], clothParticles[i + 1][j]);
 			triangles.push_back(tri1);
 			triangles.push_back(tri2);
 		}
@@ -67,18 +75,6 @@ ParticleSystem::ParticleSystem()
 	this->clothParticles[numParticles - 1][numParticles - 1]->pinned = true; 
 
 }
-/* 
-AFTER rendering
-for each node 
-	zero the normals
-	
-for each triangle 
-	compute normal
-	for each node tri vert(3)
-		add normal
-		
-for each node normalize
-*/
 
 void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 	// Compute forces
@@ -93,7 +89,6 @@ void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 			particles[i]->applyForce(force);
 		}
 	}
-
 
 	for (int i = 0; i < springDampers.size(); i++)
 	{
@@ -132,6 +127,18 @@ void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 
 }
 
+/*
+AFTER updating
+for each node
+zero the normals
+
+for each triangle
+compute normal
+for each node tri vert(3)
+add normal
+
+for each node normalize
+*/
 
 //make triangles diagonally
 void ParticleSystem::draw()
@@ -142,7 +149,23 @@ void ParticleSystem::draw()
 	//		particles[i]->draw(); 
 	//	}
 	//glEnd();
-
+	for (int i = 0; i < particles.size(); i++)
+	{
+		particles[i]->normal.Zero(); 
+	}
+	for (int i = 0; i < triangles.size(); i++)
+	{
+		//triangles[i]->computeNormal();
+		Vector3 norm = *new Vector3();
+		norm.Cross(triangles[i]->p2->position - triangles[i]->p1->position, triangles[i]->p3->position - triangles[i]->p1->position);
+		triangles[i]->p1->normal += norm;
+		triangles[i]->p2->normal += norm;
+		triangles[i]->p3->normal += norm;
+	}
+	for (int i = 0; i < particles.size(); i++)
+	{
+		particles[i]->normal.Normalize();
+	}
 
 	GLfloat cyan[] = { 0.f, .5f, .5f, 1.f };
 	GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
@@ -168,20 +191,26 @@ void ParticleSystem::draw()
 			//glColor3f(0.0, 1, 0.0);
 			Vector3 p0 = clothParticles[i][j]->position;
 			Vector3 p1 = clothParticles[i + 1][j]->position;
-			Vector3 p3 = clothParticles[i + 1][j + 1]->position;
 			Vector3 p2 = clothParticles[i][j + 1]->position;
+			Vector3 p3 = clothParticles[i + 1][j + 1]->position;			
 
-			//glNormal3f(normal.x, normal.y, normal.z); 			
+			Vector3 p0n = clothParticles[i][j]->normal;
+			Vector3 p1n = clothParticles[i + 1][j]->normal;
+			Vector3 p2n = clothParticles[i][j + 1]->normal;
+			Vector3 p3n = clothParticles[i + 1][j + 1]->normal;			
+
+			glNormal3f(p0n.x, p0n.y, p0n.z); 			
 			glVertex3f(p0.x, p0.y, p0.z);
+			glNormal3f(p1n.x, p1n.y, p1n.z);
 			glVertex3f(p1.x, p1.y, p1.z);
+			glNormal3f(p3n.x, p3n.y, p3n.z);
 			glVertex3f(p3.x, p3.y, p3.z);
-
-			//glColor3f(0.0, 0.0, 1.0);
-
-			//normal.Zero(); 
-			//glNormal3f(normal.x, normal.y, normal.z);
+			
+			glNormal3f(p0n.x, p0n.y, p0n.z);
 			glVertex3f(p0.x, p0.y, p0.z);
+			glNormal3f(p3n.x, p3n.y, p3n.z);
 			glVertex3f(p3.x, p3.y, p3.z);
+			glNormal3f(p2n.x, p2n.y, p2n.z);
 			glVertex3f(p2.x, p2.y, p2.z);								
 		}
 	}

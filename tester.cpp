@@ -173,6 +173,7 @@ void Tester::Draw() {
 	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
 	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
 
+	glNormal3f(0, 1, 0);
 	glBegin(GL_QUADS);
 		glVertex3f(-50, -10, -50);
 		glVertex3f(50, -10, -50);
@@ -219,10 +220,12 @@ void Tester::Keyboard(int key,int x,int y) {
 			Reset();
 			break;		
 		case 't':
-			cloth->reset();
-			para.reset(); 
+			cloth->reset();			
 			//wind.Zero();
 			pos.Zero(); 
+			break;
+		case 'y':
+			para.reset();
 			break;
 		case '1':
 			wind += Vector3(0.1, 0, 0);

@@ -8,6 +8,7 @@ Particle::Particle()
 	velocity = *new Vector3(); 
 	force = *new Vector3(); 
 	pinned = false; 
+	normal = *new Vector3(); 
 }
 
 Particle::Particle(float x, float y, float z)

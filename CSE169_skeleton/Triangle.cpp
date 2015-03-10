@@ -12,7 +12,7 @@ Triangle::Triangle(Particle *p1, Particle *p2, Particle *p3)
 	airVelocity = *new Vector3(0,0, 0); 
 	this->p1 = p1; 
 	this->p2 = p2; 
-	this->p3 = p3; 
+	this->p3 = p3; 	
 }
 
 void Triangle::computeForces(Vector3 &airVelocity)
@@ -46,10 +46,18 @@ void Triangle::computeForces(Vector3 &airVelocity)
 			p3->applyForce(fAeroParticle);
 
 		delete one; 
-		delete two; 
+		delete two; 		
 	}
 }
 
+void Triangle::computeNormal()
+{
+	Vector3 norm = *new Vector3();
+	norm.Cross(p2->position - p1->position, p3->position - p1->position);
+//	norm.Normalize();
+	this->n = norm;
+
+}
 Triangle::~Triangle()
 {
 }

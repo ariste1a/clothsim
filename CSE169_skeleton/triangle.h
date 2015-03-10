@@ -13,6 +13,8 @@ public:
 	Vector3 normal;
 	Vector3 airVelocity; 
 	void computeForces(Vector3&); 
+	void computeNormal();
+	Vector3 n;
 	~Triangle();
 };
 
