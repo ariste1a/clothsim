@@ -45,7 +45,7 @@ Tester::Tester(int argc,char **argv) {
 	glutSetWindowTitle( WINDOWTITLE );	
 	glEnable(GL_LIGHTING);
 	//glDisable(GL_BLEND);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	//glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
@@ -173,6 +173,7 @@ void Tester::Draw() {
 	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
 	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
 
+	glDisable(GL_CULL_FACE);
 	glNormal3f(0, 1, 0);
 	glBegin(GL_QUADS);
 		glVertex3f(-50, -10, -50);
@@ -180,7 +181,7 @@ void Tester::Draw() {
 		glVertex3f(50, -10, 50);		
 		glVertex3f(-50, -10, 50);			
 	glEnd();
-
+	glEnable(GL_CULL_FACE);
 	// Draw components
 	Cam.Draw();		// Sets up projection & viewing matrices
 	//Cube.Draw();

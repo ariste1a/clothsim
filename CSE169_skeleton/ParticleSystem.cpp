@@ -4,8 +4,7 @@ ParticleSystem::ParticleSystem()
 {	
 
 	
-	//remake this to have a set length, but increase particle density instead. 
-	float length = 10; 
+	//remake this to have a set length, but increase particle density instead. 	
 	//make triangles diagonally
 	for (int i = 0; i < numParticles; i++)
 	{		
@@ -14,7 +13,7 @@ ParticleSystem::ParticleSystem()
 			//need to make top row with weight 0 
 			Particle *particle = new Particle(); 
 			//positioning them? then need to make top row solid and immutable 
-			particle->position = Vector3(i , j , 0);
+			particle->position = Vector3(i, j , 0);
 			this->clothParticles[i][j] = particle;
 			this->particles.push_back(particle);
 			/*if (j == numParticles - 1)
@@ -167,21 +166,6 @@ void ParticleSystem::draw()
 		particles[i]->normal.Normalize();
 	}
 
-	GLfloat cyan[] = { 0.f, .5f, .5f, 1.f };
-	GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-	GLfloat shiny[] = { 50.f };
-
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-	glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
-
-	GLfloat red[] = { 0.8f, 0.0f, .8f, 1.f };
-	GLfloat white2[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-	GLfloat shiny2[] = { 1.0f };
-
-	glMaterialfv(GL_BACK, GL_DIFFUSE, red);
-	glMaterialfv(GL_BACK, GL_SPECULAR, white2);
-	glMaterialfv(GL_BACK, GL_SHININESS, shiny2);
 
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < numParticles-1; i++)
@@ -198,7 +182,15 @@ void ParticleSystem::draw()
 			Vector3 p1n = clothParticles[i + 1][j]->normal;
 			Vector3 p2n = clothParticles[i][j + 1]->normal;
 			Vector3 p3n = clothParticles[i + 1][j + 1]->normal;			
+			
+			GLfloat cyan[] = { 0.f, .5f, .5f, 1.f };
+			GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+			GLfloat shiny[] = { 50.f };
 
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
+			glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+			glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
+			//front facing
 			glNormal3f(p0n.x, p0n.y, p0n.z); 			
 			glVertex3f(p0.x, p0.y, p0.z);
 			glNormal3f(p1n.x, p1n.y, p1n.z);
@@ -211,7 +203,36 @@ void ParticleSystem::draw()
 			glNormal3f(p3n.x, p3n.y, p3n.z);
 			glVertex3f(p3.x, p3.y, p3.z);
 			glNormal3f(p2n.x, p2n.y, p2n.z);
-			glVertex3f(p2.x, p2.y, p2.z);								
+			glVertex3f(p2.x, p2.y, p2.z);		
+
+			//back facing
+
+			GLfloat red[] = { 0.8f, 0.0f, .8f, 1.f };
+			GLfloat white2[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+			GLfloat shiny2[] = { 255.0f };
+
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white2);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shiny2);
+
+			p0n = -clothParticles[i][j]->normal;
+			p1n = -clothParticles[i + 1][j]->normal;
+			p2n = -clothParticles[i][j + 1]->normal;
+			p3n = -clothParticles[i + 1][j + 1]->normal;
+
+			glNormal3f(p0n.x, p0n.y, p0n.z);
+			glVertex3f(p0.x, p0.y, p0.z);
+			glNormal3f(p2n.x, p2n.y, p2n.z);
+			glVertex3f(p2.x, p2.y, p2.z);
+			glNormal3f(p3n.x, p3n.y, p3n.z);
+			glVertex3f(p3.x, p3.y, p3.z);
+
+			glNormal3f(p0n.x, p0n.y, p0n.z);
+			glVertex3f(p0.x, p0.y, p0.z);
+			glNormal3f(p3n.x, p3n.y, p3n.z);
+			glVertex3f(p3.x, p3.y, p3.z);
+			glNormal3f(p1n.x, p1n.y, p1n.z);
+			glVertex3f(p1.x, p1.y, p1.z);
 		}
 	}
 	glEnd(); 
