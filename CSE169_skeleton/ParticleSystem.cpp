@@ -2,7 +2,7 @@
 
 ParticleSystem::ParticleSystem()
 {	
-
+	
 	
 	//remake this to have a set length, but increase particle density instead. 	
 	//make triangles diagonally
@@ -165,7 +165,9 @@ void ParticleSystem::draw()
 	{
 		particles[i]->normal.Normalize();
 	}
-
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, this->textureLoader.texture[0]);
 
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < numParticles-1; i++)
@@ -183,30 +185,59 @@ void ParticleSystem::draw()
 			Vector3 p2n = clothParticles[i][j + 1]->normal;
 			Vector3 p3n = clothParticles[i + 1][j + 1]->normal;			
 			
-			GLfloat cyan[] = { 0.f, .5f, .5f, 1.f };
+			GLfloat cyan[] = { 1.f, 1.f, 1.f, 1.f };
 			GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 			GLfloat shiny[] = { 50.f };
-
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
 			glMaterialfv(GL_FRONT, GL_SPECULAR, white);
 			glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
 			//front facing
+
+			glTexCoord2f(i / 20.0, j / 20.0);
 			glNormal3f(p0n.x, p0n.y, p0n.z); 			
 			glVertex3f(p0.x, p0.y, p0.z);
+			
+			glTexCoord2f((i+1)/ 20.0, j / 20.0);
 			glNormal3f(p1n.x, p1n.y, p1n.z);
 			glVertex3f(p1.x, p1.y, p1.z);
+			
+			glTexCoord2f((i+1) / 20.0, (j+1) / 20.0);
 			glNormal3f(p3n.x, p3n.y, p3n.z);
 			glVertex3f(p3.x, p3.y, p3.z);
 			
+			glTexCoord2f(i/ 20.0, j / 20.0);
 			glNormal3f(p0n.x, p0n.y, p0n.z);
 			glVertex3f(p0.x, p0.y, p0.z);
+			
+			glTexCoord2f((i + 1) / 20.0, (j + 1) / 20.0);
 			glNormal3f(p3n.x, p3n.y, p3n.z);
 			glVertex3f(p3.x, p3.y, p3.z);
+
+			glTexCoord2f(i/ 20.0, (j + 1) / 20.0);
 			glNormal3f(p2n.x, p2n.y, p2n.z);
 			glVertex3f(p2.x, p2.y, p2.z);		
+		}
+	}
+	glEnd(); 
+	glDisable(GL_TEXTURE_2D);
 
-			//back facing
+	glBegin(GL_TRIANGLES);
+	for (int i = 0; i < numParticles - 1; i++)
+	{
+		for (int j = 0; j < numParticles - 1; j++)
+		{
+			//glColor3f(0.0, 1, 0.0);
+			Vector3 p0 = clothParticles[i][j]->position;
+			Vector3 p1 = clothParticles[i + 1][j]->position;
+			Vector3 p2 = clothParticles[i][j + 1]->position;
+			Vector3 p3 = clothParticles[i + 1][j + 1]->position;
 
+			Vector3 p0n = clothParticles[i][j]->normal;
+			Vector3 p1n = clothParticles[i + 1][j]->normal;
+			Vector3 p2n = clothParticles[i][j + 1]->normal;
+			Vector3 p3n = clothParticles[i + 1][j + 1]->normal;
+
+			//back facing						
 			GLfloat red[] = { 0.8f, 0.0f, .8f, 1.f };
 			GLfloat white2[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 			GLfloat shiny2[] = { 255.0f };
@@ -235,7 +266,7 @@ void ParticleSystem::draw()
 			glVertex3f(p1.x, p1.y, p1.z);
 		}
 	}
-	glEnd(); 
+	glEnd();	
 
 }
 

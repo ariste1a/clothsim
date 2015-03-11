@@ -26,7 +26,7 @@ Rope::Rope(Particle *p1, Particle *p2, int links)
 		damper->restLength = link.Mag(); 
 		dampers.push_back(damper); 
 		damper->springConstant = 3000;
-		damper->dampingFactor = 23;		
+		damper->dampingFactor = 50;		
 	}
 	dampers.push_back(new SpringDamper(rope.back(), p2)); 	
 	dir.Normalize(); 

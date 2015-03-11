@@ -36,7 +36,6 @@ Tester::Tester(int argc,char **argv) {
 	LeftDown=MiddleDown=RightDown=false;
 	MouseX=MouseY=0;
 
-	cloth = new ParticleSystem(); 
 	// Create the window
 	glutInitDisplayMode( GLUT_RGBA| GLUT_DOUBLE | GLUT_DEPTH );
 	glutInitWindowSize( WinX, WinY );
@@ -45,8 +44,7 @@ Tester::Tester(int argc,char **argv) {
 	glutSetWindowTitle( WINDOWTITLE );	
 	glEnable(GL_LIGHTING);
 	//glDisable(GL_BLEND);
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);	
 	//glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
 	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
@@ -125,7 +123,9 @@ Tester::Tester(int argc,char **argv) {
 	position.Identity(); 
 	move = 0.1;
 	start = clock(); 
-	para = *new Parachute(); 
+	para = *new Parachute(); 	
+	cloth = new ParticleSystem(); 
+	cloth->textureLoader.LoadGLTextures("doge_tex.bmp");
 }
 	
 ////////////////////////////////////////////////////////////////////////////////

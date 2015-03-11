@@ -1,3 +1,6 @@
+#ifndef BMPImage_HEADER
+#define BMPImage_HEADER
+
 #include "../core.h"
 class BMPImage
 {
@@ -13,3 +16,5 @@ public:
 	unsigned long sizeY;
 	char *data;
 };
+
+#endif

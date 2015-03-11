@@ -4,6 +4,7 @@
 #include <vector> 
 #include "SpringDamper.h"
 #include "Triangle.h"
+#include "BMPImage.h"
 class ParticleSystem
 {
 public:
@@ -19,7 +20,8 @@ public:
 	void move(Matrix34 pos);
 	void rotate(Matrix34 matrix);
 	void draw(); 
-	void reset(); 
+	void reset(); 	
+	BMPImage textureLoader = *new BMPImage();
 	~ParticleSystem();
 };
 
