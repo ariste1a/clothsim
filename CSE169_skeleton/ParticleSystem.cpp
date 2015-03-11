@@ -97,7 +97,7 @@ void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 	for (int i = 0; i < triangles.size(); i++)
 	{
 		triangles[i]->computeForces(wind);
-	}
+	}	
 
 	for (int i = 0; i < particles.size(); i++)
 	{	
@@ -111,17 +111,17 @@ void ParticleSystem::update(float deltaTime, Vector3 &wind) {
 		float restLength = springDampers[i]->restLength;
 		Vector3 e = pulledDist / dist; //pulledDist.Normalize(); 
 
-		/*if (dist >(restLength*0.05) && !springDampers[i]->p1->pinned && springDampers[i]->p1->position.y > -10)
-		{
-			Vector3 moveBack = -e*0.01;
-			springDampers[i]->p1->position += moveBack;
-		}
+		//if (dist >(restLength*0.05) && !springDampers[i]->p1->pinned && springDampers[i]->p1->position.y > -10)
+		//{
+		//	Vector3 moveBack = -e*0.01;
+		//	springDampers[i]->p1->position += moveBack;
+		//}
 
-		if (dist > (restLength*0.1) && !springDampers[i]->p2->pinned && springDampers[i]->p2->position.y > -10)
-		{
-			Vector3 moveBack = e*0.01;
-			springDampers[i]->p2->position += moveBack;
-		}*/
+		//if (dist > (restLength*0.1) && !springDampers[i]->p2->pinned && springDampers[i]->p2->position.y > -10)
+		//{
+		//	Vector3 moveBack = e*0.01;
+		//	springDampers[i]->p2->position += moveBack;
+		//}
 	}
 
 }
@@ -155,7 +155,7 @@ void ParticleSystem::draw()
 	for (int i = 0; i < triangles.size(); i++)
 	{
 		//triangles[i]->computeNormal();
-		Vector3 norm = *new Vector3();
+		Vector3 norm = Vector3();
 		norm.Cross(triangles[i]->p2->position - triangles[i]->p1->position, triangles[i]->p3->position - triangles[i]->p1->position);
 		triangles[i]->p1->normal += norm;
 		triangles[i]->p2->normal += norm;
